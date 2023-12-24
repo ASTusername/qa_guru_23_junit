@@ -1,11 +1,12 @@
 package guru.qa.pages;
 
-import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
@@ -22,11 +23,12 @@ public class SearchPage {
 
     public SearchPage setAddress(String value) {
         addressInput.setValue(value);
-        addressGroupInput.find(withText(value)).click(ClickOptions.usingJavaScript());
+        //    addressGroupInput.find(withText(value)).click(ClickOptions.usingJavaScript());
+        addressGroupInput.$(byTitle(value)).click();
         return this;
     }
 
-    public void clickSearch(){
+    public void clickSearch() {
         searchBottom.parent().shouldBe(enabled).click();
     }
 
@@ -40,6 +42,12 @@ public class SearchPage {
         switch (key) {
             case "PhoneButton":
                 selector = $("[data-mark='PhoneButton']");
+                break;
+            case "MainPrice":
+                selector = $("[data-mark='MainPrice']");
+                break;
+            case "PriceInfo":
+                selector = $("[data-mark='PriceInfo']");
                 break;
             case "Title":
                 selector = $("[data-name='Breadcrumbs']");

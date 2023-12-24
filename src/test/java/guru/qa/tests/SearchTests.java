@@ -13,9 +13,9 @@ public class SearchTests extends TestBase {
     DataTest dataTest = new DataTest();
 
     @ValueSource(strings = {
-            "Москва", "Сочи"
+            "Москва", "Сочи, Краснодарский край"
     })
-    @ParameterizedTest(name = "Для поискового запроса {0} должен отдавать не пустой список карточек")
+    @ParameterizedTest(name = "Для адреса {0} должен отдавать не пустой список карточек")
     @DisplayName("По адресу")
     void searchResultsShouldNotBeEmptyTest(String address) {
         searchPage.openPage()
@@ -27,21 +27,23 @@ public class SearchTests extends TestBase {
     }
 
     @CsvSource(value = {
-            "Москва , Продажа 1-комн и 2-комн квартир в Москве",
-            "Сочи , Продажа 1-комн и 2-комн квартир в Сочи"
+            "Томск , Продажа 1-комн и 2-комн квартир в Томске",
+            "Омск , Продажа 1-комн и 2-комн квартир в Омске"
     })
-    @ParameterizedTest(name = "Для поискового запроса {0} в заголовке должно быть {1}")
+    @ParameterizedTest(name = "Для адреса {0} в заголовке должно быть {1}")
     @DisplayName("по дата-провайдеру CsvSource")
     void searchResultsShouldContainExpectedUrl(String address, String expectedData) {
         searchPage.openPage()
                 .setAddress(address);
         searchPage.clickSearch();
 
-        searchPage.checkResult("Title", expectedData);
+        searchPage.checkResult("Title", expectedData)
+                .checkResult("MainPrice", dataTest.mainPrice)
+                .checkResult("PriceInfo", dataTest.priceInfo);
     }
 
     @CsvFileSource(resources = "/test_data/cian.csv")
-    @ParameterizedTest(name = "Для поискового запроса {0} в заголовке должно быть {1}")
+    @ParameterizedTest(name = "Для адреса {0} в заголовке должно быть {1}")
     @DisplayName("по дата-провайдеру CsvFileSource")
     void searchResultsShouldContainExpectedUrlFromCsvFile(String address, String expectedData) {
         searchPage.openPage()
